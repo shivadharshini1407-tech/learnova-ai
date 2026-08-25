@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learnova AI — Your Personal Study Assistant</title>
+  <style>*{box-sizing:border-box}
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#6d7890;--line:#e7eaf1;--accent:#5b5ce2;--accent2:#7c3aed;--soft:#eef0ff;--shadow:0 18px 50px rgba(30,40,80,.09)}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--bg)}
+button,textarea,input{font:inherit}
+button{cursor:pointer;border:0}
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:270px;background:#111522;color:#fff;padding:24px 18px;display:flex;flex-direction:column;gap:20px}
+.brand{display:flex;gap:12px;align-items:center;padding:4px 7px 15px}
+.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#8b5cf6,#4f46e5);display:grid;place-items:center;font-size:22px;font-weight:900;box-shadow:0 8px 25px #4f46e555}
+.brand h1{font-size:17px;margin:0}.brand span{font-size:10px;color:#aab2c8}
+.student-card{display:flex;align-items:center;gap:10px;background:#1b2030;border:1px solid #2a3042;padding:12px;border-radius:16px}
+.avatar{width:35px;height:35px;border-radius:11px;background:#282e43;display:grid;place-items:center}
+.student-card strong{display:block;font-size:12px}.student-card small{color:#9da7bd;font-size:10px}
+.status-dot{margin-left:auto;width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 4px #4ade8020}
+nav{display:grid;gap:7px}
+.nav-btn{color:#b7bfd1;background:transparent;text-align:left;padding:12px;border-radius:12px;display:flex;gap:11px;align-items:center;font-size:13px}
+.nav-btn:hover,.nav-btn.active{background:#23283a;color:#fff}
+.progress-card{margin-top:auto;background:#1b2030;border:1px solid #2a3042;border-radius:16px;padding:14px}
+.progress-head{display:flex;justify-content:space-between;font-size:12px}.progress-head b{color:#a5b4fc}
+.progress{height:7px;background:#2c3346;border-radius:20px;overflow:hidden;margin:10px 0}
+.progress i{display:block;width:72%;height:100%;background:linear-gradient(90deg,#7c3aed,#5b5ce2);border-radius:20px}
+.progress-card small{font-size:10px;color:#8792aa}
+.settings-btn{background:#1b2030;color:#aeb7cb;border:1px solid #2a3042;padding:10px;border-radius:12px;font-size:12px}
+.main{flex:1;min-width:0}
+.topbar{height:90px;background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 5%;position:sticky;top:0;z-index:2}
+.eyebrow{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--accent);margin:0 0 5px}.topbar h2{font-size:21px;margin:0}
+.top-actions{display:flex;gap:9px;align-items:center}.pill{font-size:11px;padding:7px 10px;background:#eefbf3;color:#15803d;border-radius:99px}.top-actions button{width:34px;height:34px;border-radius:10px;background:#f3f4f7;color:#555}
+.workspace{max-width:1000px;margin:auto;padding:35px 5% 25px}
+.hero{background:linear-gradient(135deg,#171a2b,#25214a);color:#fff;border-radius:25px;padding:28px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;right:-90px;top:-120px;background:#8b5cf655;filter:blur(3px)}
+.hero-badge{display:inline-block;padding:6px 9px;border-radius:99px;background:#ffffff16;border:1px solid #ffffff1c;font-size:10px;color:#d9d7ff}.hero h3{font-size:27px;margin:13px 0 7px;position:relative;z-index:1}.hero p{color:#c7cbe0;font-size:13px;max-width:620px;position:relative;z-index:1}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:22px;position:relative;z-index:1}
+.quick-card{background:#ffffff0e;border:1px solid #ffffff18;color:#fff;text-align:left;padding:13px;border-radius:15px;min-height:76px}
+.quick-card:hover{background:#ffffff18;transform:translateY(-1px)}.quick-card b{display:block;font-size:12px}.quick-card span{display:block;color:#b9bfd4;font-size:10px;margin-top:6px}
+.chat{display:flex;flex-direction:column;gap:14px;padding:24px 5px;min-height:180px}
+.msg{display:flex;gap:10px;max-width:85%;animation:up .2s ease}.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.bubble{padding:12px 15px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:0 5px 20px #24304d08;font-size:13px;line-height:1.55;white-space:pre-wrap}
+.user .bubble{background:linear-gradient(135deg,#5b5ce2,#7c3aed);color:#fff;border:0}
+.msg-icon{width:31px;height:31px;flex:0 0 31px;border-radius:11px;background:#e9eaff;display:grid;place-items:center;font-size:14px}
+.user .msg-icon{background:#ddd6fe}.bubble strong{font-weight:800}
+.composer-wrap{position:sticky;bottom:10px}.mode-chip{display:inline-block;background:#ececff;color:#4f46b5;font-size:10px;font-weight:800;padding:6px 9px;border-radius:99px;margin:0 0 7px 7px}
+.composer{background:#fff;border:1px solid #dfe3ec;border-radius:18px;padding:9px;display:flex;gap:8px;box-shadow:0 14px 35px #1e293b12}
+textarea{resize:none;border:0;outline:0;flex:1;padding:8px 10px;max-height:120px;color:var(--ink);font-size:13px;background:transparent}
+#sendBtn{width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,#5b5ce2,#7c3aed);color:#fff;font-size:18px}
+.composer-note{text-align:center;color:#98a1b3;font-size:9px;margin-top:8px}
+.modal{position:fixed;inset:0;background:#11152299;display:grid;place-items:center;z-index:20;padding:20px}.hidden{display:none}
+.modal-box{width:min(430px,100%);background:#fff;border-radius:20px;padding:25px;position:relative;box-shadow:var(--shadow)}
+.modal-box h3{margin-top:0}.modal-box p{font-size:12px;color:var(--muted);line-height:1.5}
+.modal-box label{display:block;font-size:11px;font-weight:700;margin:15px 0}.modal-box input:not([type=checkbox]){display:block;width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;margin-top:6px;outline:none}
+.toggle-row{display:flex!important;justify-content:space-between;align-items:center}.close{position:absolute;right:15px;top:13px;background:#f3f4f7;border-radius:8px;width:30px;height:30px}
+.primary{width:100%;padding:12px;background:#5b5ce2;color:#fff;border-radius:11px;font-weight:700}
+.typing{opacity:.65}
+@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(max-width:800px){.sidebar{width:70px;padding:16px 10px}.brand div:not(.logo),.student-card div:not(.avatar),.status-dot,.nav-btn span,.progress-card,.settings-btn{display:none}.brand{padding:0;justify-content:center}.student-card{justify-content:center}.nav-btn{justify-content:center}.workspace{padding-top:20px}.quick-grid{grid-template-columns:repeat(2,1fr)}.topbar{padding:0 20px}.topbar h2{font-size:17px}}
+@media(max-width:520px){.hero{padding:21px}.hero h3{font-size:22px}.quick-grid{grid-template-columns:1fr 1fr}.msg{max-width:94%}.workspace{padding-left:12px;padding-right:12px}}
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>Learnova AI</h1>
+          <span>Learn smarter. Not harder.</span>
+        </div>
+      </div>
+
+      <div class="student-card">
+        <div class="avatar">🎓</div>
+        <div>
+          <strong>Student Mode</strong>
+          <small id="modeText">Demo AI • Exact Answers</small>
+        </div>
+        <span class="status-dot"></span>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-mode="chat">💬 <span>Ask StudyMate</span></button>
+        <button class="nav-btn" data-mode="explain">🧠 <span>Explain a Topic</span></button>
+        <button class="nav-btn" data-mode="quiz">🎯 <span>Quick Quiz</span></button>
+        <button class="nav-btn" data-mode="exam">📝 <span>Exam Mode</span></button>
+        <button class="nav-btn" data-mode="plan">📅 <span>Study Planner</span></button>
+      </nav>
+
+      <div class="progress-card">
+        <div class="progress-head">
+          <span>Focus Meter</span><b id="focusScore">72%</b>
+        </div>
+        <div class="progress"><i id="focusBar"></i></div>
+        <small>Complete a quiz to improve your score.</small>
+      </div>
+
+      <button class="settings-btn" id="settingsBtn">⚙ Settings</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PERSONAL AI LEARNING LAB</p>
+          <h2 id="pageTitle">What are you learning today?</h2>
+        </div>
+        <div class="top-actions">
+          <span class="pill" id="aiStatus">● Demo AI</span>
+          <button id="clearBtn" title="Clear chat">↻</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="hero" id="hero">
+          <div class="hero-badge">✨ Smart Study Mode</div>
+          <h3>Turn confusion into confidence.</h3>
+          <p>Ask a question, simplify a difficult topic, generate a quiz, or switch to exam mode.</p>
+          <div class="quick-grid">
+            <button class="quick-card" data-prompt="Explain recursion in C in very easy words with a simple example.">
+              <b>🧩 Explain</b><span>Make difficult topics easy</span>
+            </button>
+            <button class="quick-card" data-prompt="Create a 5-question MCQ quiz on C programming and ask me one question at a time.">
+              <b>🎯 Quiz me</b><span>Test your understanding</span>
+            </button>
+            <button class="quick-card" data-prompt="Give me a 7-day study plan for C programming, mathematics and English. I can study 2 hours daily.">
+              <b>📅 Plan</b><span>Build a realistic routine</span>
+            </button>
+            <button class="quick-card" data-prompt="Explain the difference between call by value and call by reference in an exam-friendly way.">
+              <b>📝 Exam mode</b><span>Short, scoring answers</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="chat" id="chat"></div>
+
+        <div class="composer-wrap">
+          <div class="mode-chip" id="modeChip">💬 Ask StudyMate</div>
+          <div class="composer">
+            <textarea id="messageInput" rows="1" placeholder="Ask me anything about your studies..."></textarea>
+            <button id="sendBtn">➤</button>
+          </div>
+          <div class="composer-note">Tip: Try “Explain pointers like I’m a beginner” or “Quiz me on recursion”.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="settingsModal">
+    <div class="modal-box">
+      <button class="close" id="closeSettings">×</button>
+      <h3>StudyMate Settings</h3>
+      <p>Use <b>Demo AI</b> for the competition without an API key. For live AI answers, connect the optional backend.</p>
+      <label>Backend URL
+        <input id="apiUrl" placeholder="http://localhost:3000">
+      </label>
+      <label class="toggle-row">
+        <span>Use Live AI when available</span>
+        <input type="checkbox" id="liveToggle">
+      </label>
+      <button class="primary" id="saveSettings">Save settings</button>
+    </div>
+  </div>
+
+  <script>const state = {
+  mode: "chat",
+  focus: 72,
+  live: localStorage.getItem("studymate_live") === "true",
+  apiUrl: localStorage.getItem("studymate_api") || "http://localhost:3000"
+};
+
+const chat = document.getElementById("chat");
+const input = document.getElementById("messageInput");
+const hero = document.getElementById("hero");
+const pageTitle = document.getElementById("pageTitle");
+const modeChip = document.getElementById("modeChip");
+const aiStatus = document.getElementById("aiStatus");
+const modeText = document.getElementById("modeText");
+
+const modeData = {
+  chat: ["Ask StudyMate", "What are you learning today?"],
+  explain: ["Explain a Topic", "What topic feels difficult?"],
+  quiz: ["Quick Quiz", "Ready to test yourself?"],
+  exam: ["Exam Mode", "Need an answer you can write in an exam?"],
+  plan: ["Study Planner", "Let’s build a study plan that fits you."]
+};
+
+function escapeHTML(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function addMessage(text, who="bot"){
+  const row = document.createElement("div");
+  row.className = `msg ${who}`;
+  const icon = document.createElement("div");
+  icon.className = "msg-icon";
+  icon.textContent = who === "bot" ? "🤖" : "👤";
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = escapeHTML(text).replace(/\n/g, "<br>");
+  row.append(icon,bubble);
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function setMode(mode){
+  state.mode = mode;
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
+  modeChip.textContent = mode === "chat" ? "💬 Ask StudyMate" :
+    mode === "explain" ? "🧠 Explain a Topic" :
+    mode === "quiz" ? "🎯 Quick Quiz" :
+    mode === "exam" ? "📝 Exam Mode" : "📅 Study Planner";
+  pageTitle.textContent = modeData[mode][1];
+  input.placeholder = {
+    chat:"Ask me anything about your studies...",
+    explain:"Example: Explain pointers in C like I'm a beginner...",
+    quiz:"Example: Quiz me on C functions...",
+    exam:"Example: Define recursion and give a 2-mark answer...",
+    plan:"Example: I have 2 hours daily and 4 subjects..."
+  }[mode];
+}
+
+function getMarks(text){
+  const m = text.match(/(\d+)\s*[- ]?\s*marks?/i);
+  return m ? Number(m[1]) : 3;
+}
+
+function examAnswer(text){
+  const q = text.toLowerCase();
+  const marks = getMarks(text);
+
+  const answers = {
+    recursion: {
+      2: `Recursion is a programming technique in which a function calls itself to solve a problem. A base condition is required to stop the recursive calls.`,
+      3: `Recursion is a programming technique in which a function calls itself to solve a smaller part of the same problem.\n\n1. The function calls itself.\n2. Each call solves a smaller problem.\n3. A base condition stops the recursion.\n\nExample: Factorial can be calculated using recursion: 4! = 4 × 3 × 2 × 1 = 24.`,
+      5: `RECURSION\n\nDefinition:\nRecursion is a programming technique in which a function calls itself to solve a problem by reducing it into smaller subproblems.\n\nImportant points:\n1. A recursive function calls itself.\n2. Each call works with a smaller or simpler input.\n3. A base condition is required to stop the recursion.\n4. Without a proper base condition, the function may continue calling itself.\n\nExample:\nThe factorial of 4 can be calculated as:\n4! = 4 × 3 × 2 × 1 = 24.\n\nConclusion:\nRecursion is useful when a problem can be divided into smaller problems of the same type.`
+    },
+    "data analytics": {
+      2: `Data analytics is the process of examining data to find useful information and support decision-making.`,
+      3: `Data analytics is the process of examining data to find useful information, patterns and trends.\n\n1. It collects and cleans data.\n2. It analyses data to identify patterns and trends.\n3. It helps in better decision-making.\n\nExample: A college can analyse student marks to identify subjects where students need more support.`,
+      5: `DATA ANALYTICS\n\nDefinition:\nData analytics is the systematic process of collecting, cleaning, processing and analysing data to discover useful information and support decision-making.\n\nMain points:\n1. Data is collected from different sources.\n2. The collected data is cleaned and organised.\n3. Analytical methods are used to find patterns and trends.\n4. The results help in making better decisions.\n\nExample:\nA college can analyse student marks and attendance to identify students who need academic support.\n\nConclusion:\nThus, data analytics converts raw data into useful information for better decision-making.`
+    },
+    "storage classes": {
+      2: `Storage classes in C define the scope, lifetime and visibility of variables. The main storage classes are auto, register, static and extern.`,
+      3: `Storage classes in C specify the scope, lifetime and visibility of variables.\n\nThe four main storage classes are:\n1. auto\n2. register\n3. static\n4. extern\n\nThey help control how variables are stored and accessed.`,
+      5: `STORAGE CLASSES IN C\n\nDefinition:\nStorage classes define the scope, lifetime, visibility and storage behaviour of variables in a C program.\n\nTypes:\n1. auto – The default storage class for local variables.\n2. register – Requests faster access by suggesting storage in a CPU register.\n3. static – Preserves the value of a variable between function calls.\n4. extern – Refers to a global variable defined elsewhere.\n\nConclusion:\nStorage classes help control the behaviour and accessibility of variables in C.`
+    },
+    pointer: {
+      2: `A pointer is a variable that stores the memory address of another variable. In C, & gives an address and * accesses the value at that address.`,
+      3: `A pointer is a variable that stores the address of another variable.\n\n1. The & operator is used to obtain an address.\n2. The * operator is used to access the value stored at an address.\n3. Pointers are useful in arrays, functions and dynamic memory.\n\nExample: int *p; declares p as a pointer to an integer.`
+    },
+    functions: {
+      2: `A function in C is a block of statements that performs a specific task. Functions improve code reusability and make programs easier to understand.`,
+      3: `A function is a named block of code that performs a specific task.\n\n1. It avoids repeating code.\n2. It makes programs modular and easier to understand.\n3. It can be called whenever its task is required.\n\nExample: A function add() can be used to add two numbers.`
+    },
+    "call by value": {
+      2: `Call by value is a method of passing arguments in which a copy of the value is passed to the function. Changes inside the function do not affect the original variable.`,
+      3: `Call by value is a parameter-passing method in which a copy of the actual argument is passed to the function.\n\n1. The function receives a copy of the value.\n2. Changes inside the function do not affect the original variable.\n3. It protects the original data from changes made inside the function.`
+    },
+    "call by reference": {
+      2: `Call by reference is a parameter-passing method in which the address of a variable is passed to a function. Changes made through that address can affect the original variable.`,
+      3: `Call by reference passes the address of the actual variable to a function.\n\n1. The function can access the original variable through its address.\n2. Changes made through that address affect the original variable.\n3. In C, this is commonly achieved using pointers.`
+    }
+  };
+
+  let key = Object.keys(answers).find(k => q.includes(k));
+  if (!key) {
+    return `📝 EXAM ANSWER\n\nI need the subject/topic to give the exact answer.\n\nFor example, type:\n“Define recursion for 5 marks”\nor\n“Explain storage classes in C for 5 marks”.`;
+  }
+
+  const bank = answers[key];
+  const answer = bank[marks] || bank[3] || bank[2];
+  return `📝 ${marks}-MARK EXAM ANSWER\n\n${answer}`;
+}
+
+function demoResponse(text){
+  const t=text.toLowerCase();
+
+  // IMPORTANT: Exam Mode returns the actual answer, not instructions.
+  if(state.mode === "exam" || /\b\d+\s*[- ]?\s*marks?\b/.test(t)){
+    return examAnswer(text);
+  }
+
+  if(state.mode === "quiz" || /\bquiz|mcq|test me\b/.test(t)){
+    return `🎯 QUICK QUIZ — Question 1/5\n\nWhich keyword is used to return a value from a function in C?\n\nA) break\nB) return\nC) continue\nD) exit\n\nReply with A, B, C or D.`;
+  }
+
+  if(state.mode === "plan" || /\bstudy plan|timetable|schedule\b/.test(t)){
+    return `📅 SMART STUDY PLAN\n\n• 25 min — Learn one concept\n• 5 min — Break\n• 25 min — Practice questions\n• 5 min — Break\n• 20 min — Recall without notes\n• 10 min — Review mistakes\n\nTell me your subjects, exam date and daily study time for a personalised plan.`;
+  }
+
+  if(/\brecursion\b/.test(t)) return examAnswer("recursion 3 marks");
+  if(/\bpointer|pointers\b/.test(t)) return examAnswer("pointer 3 marks");
+
+  if(/\bhello|hi|hey\b/.test(t)){
+    return `👋 Hi! I’m Learnova AI.\n\nAsk me something like:\n“Define recursion for 5 marks.”\n“Explain data analytics for 3 marks.”`;
+  }
+
+  return `💡 Ask me a specific study question.\n\nExamples:\n• Define recursion for 5 marks\n• Explain pointers for 3 marks\n• Storage classes in C for 5 marks\n• Quiz me on C functions`;
+}
+async function liveResponse(text){
+  const res = await fetch(`${state.apiUrl.replace(/\/$/,"")}/api/chat`, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:text, mode:state.mode})
+  });
+  if(!res.ok) throw new Error("Backend unavailable");
+  const data = await res.json();
+  return data.reply;
+}
+
+async function sendMessage(prefill=null){
+  const text = (prefill ?? input.value).trim();
+  if(!text) return;
+  if(!prefill) input.value = "";
+  addMessage(text,"user");
+
+  const typing = document.createElement("div");
+  typing.className = "msg bot";
+  typing.innerHTML = `<div class="msg-icon">🤖</div><div class="bubble typing">StudyMate is thinking…</div>`;
+  chat.appendChild(typing);
+
+  try{
+    let reply;
+    if(state.live) reply = await liveResponse(text);
+    else reply = demoResponse(text);
+    typing.remove();
+    addMessage(reply,"bot");
+  }catch(e){
+    typing.remove();
+    addMessage("I couldn’t reach the Live AI server, so I switched to Demo AI for this answer. Check that the backend is running and your API key is configured.","bot");
+  }
+}
+
+document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
+document.querySelectorAll(".quick-card").forEach(btn => btn.addEventListener("click",()=>sendMessage(btn.dataset.prompt)));
+document.getElementById("sendBtn").addEventListener("click",()=>sendMessage());
+input.addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.shiftKey){e.preventDefault();sendMessage();} });
+input.addEventListener("input",()=>{input.style.height="auto";input.style.height=Math.min(input.scrollHeight,120)+"px";});
+document.getElementById("clearBtn").addEventListener("click",()=>{chat.innerHTML=""; hero.style.display="block";});
+document.getElementById("settingsBtn").addEventListener("click",()=>{
+  document.getElementById("apiUrl").value=state.apiUrl;
+  document.getElementById("liveToggle").checked=state.live;
+  document.getElementById("settingsModal").classList.remove("hidden");
+});
+document.getElementById("closeSettings").addEventListener("click",()=>document.getElementById("settingsModal").classList.add("hidden"));
+document.getElementById("saveSettings").addEventListener("click",()=>{
+  state.apiUrl=document.getElementById("apiUrl").value.trim()||"http://localhost:3000";
+  state.live=document.getElementById("liveToggle").checked;
+  localStorage.setItem("studymate_api",state.apiUrl);
+  localStorage.setItem("studymate_live",String(state.live));
+  updateStatus();
+  document.getElementById("settingsModal").classList.add("hidden");
+});
+function updateStatus(){
+  aiStatus.textContent=state.live ? "● Live AI" : "● Demo AI";
+  aiStatus.style.background=state.live ? "#eef2ff" : "#eefbf3";
+  aiStatus.style.color=state.live ? "#4f46b5" : "#15803d";
+  modeText.textContent=state.live ? "Live AI • Connected" : "Demo AI • Exact Answers";
+}
+document.getElementById("focusScore").textContent=state.focus+"%";
+document.getElementById("focusBar").style.width=state.focus+"%";
+updateStatus();
+addMessage("Hi! I’m Learnova AI 👋\nYour personal learning assistant. Pick a mode or ask me a question to begin.","bot");
+</script>
+</body>
+</html>
