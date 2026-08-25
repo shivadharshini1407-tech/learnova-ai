@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyMate AI — Your Personal Study Assistant</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>StudyMate AI</h1>
+          <span>Learn smarter. Not harder.</span>
+        </div>
+      </div>
+
+      <div class="student-card">
+        <div class="avatar">🎓</div>
+        <div>
+          <strong>Student Mode</strong>
+          <small id="modeText">Demo AI • Ready</small>
+        </div>
+        <span class="status-dot"></span>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-mode="chat">💬 <span>Ask StudyMate</span></button>
+        <button class="nav-btn" data-mode="explain">🧠 <span>Explain a Topic</span></button>
+        <button class="nav-btn" data-mode="quiz">🎯 <span>Quick Quiz</span></button>
+        <button class="nav-btn" data-mode="exam">📝 <span>Exam Mode</span></button>
+        <button class="nav-btn" data-mode="plan">📅 <span>Study Planner</span></button>
+      </nav>
+
+      <div class="progress-card">
+        <div class="progress-head">
+          <span>Focus Meter</span><b id="focusScore">72%</b>
+        </div>
+        <div class="progress"><i id="focusBar"></i></div>
+        <small>Complete a quiz to improve your score.</small>
+      </div>
+
+      <button class="settings-btn" id="settingsBtn">⚙ Settings</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PERSONAL AI LEARNING LAB</p>
+          <h2 id="pageTitle">What are you learning today?</h2>
+        </div>
+        <div class="top-actions">
+          <span class="pill" id="aiStatus">● Demo AI</span>
+          <button id="clearBtn" title="Clear chat">↻</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="hero" id="hero">
+          <div class="hero-badge">✨ Smart Study Mode</div>
+          <h3>Turn confusion into confidence.</h3>
+          <p>Ask a question, simplify a difficult topic, generate a quiz, or switch to exam mode.</p>
+          <div class="quick-grid">
+            <button class="quick-card" data-prompt="Explain recursion in C in very easy words with a simple example.">
+              <b>🧩 Explain</b><span>Make difficult topics easy</span>
+            </button>
+            <button class="quick-card" data-prompt="Create a 5-question MCQ quiz on C programming and ask me one question at a time.">
+              <b>🎯 Quiz me</b><span>Test your understanding</span>
+            </button>
+            <button class="quick-card" data-prompt="Give me a 7-day study plan for C programming, mathematics and English. I can study 2 hours daily.">
+              <b>📅 Plan</b><span>Build a realistic routine</span>
+            </button>
+            <button class="quick-card" data-prompt="Explain the difference between call by value and call by reference in an exam-friendly way.">
+              <b>📝 Exam mode</b><span>Short, scoring answers</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="chat" id="chat"></div>
+
+        <div class="composer-wrap">
+          <div class="mode-chip" id="modeChip">💬 Ask StudyMate</div>
+          <div class="composer">
+            <textarea id="messageInput" rows="1" placeholder="Ask me anything about your studies..."></textarea>
+            <button id="sendBtn">➤</button>
+          </div>
+          <div class="composer-note">Tip: Try “Explain pointers like I’m a beginner” or “Quiz me on recursion”.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="settingsModal">
+    <div class="modal-box">
+      <button class="close" id="closeSettings">×</button>
+      <h3>StudyMate Settings</h3>
+      <p>Use <b>Demo AI</b> for the competition without an API key. For live AI answers, connect the optional backend.</p>
+      <label>Backend URL
+        <input id="apiUrl" placeholder="http://localhost:3000">
+      </label>
+      <label class="toggle-row">
+        <span>Use Live AI when available</span>
+        <input type="checkbox" id="liveToggle">
+      </label>
+      <button class="primary" id="saveSettings">Save settings</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
